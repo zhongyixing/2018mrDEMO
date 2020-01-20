@@ -5,13 +5,15 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import com.zhongyx.bigdata.contest.demo2.Demo2Mapper;
-import com.zhongyx.bigdata.contest.demo2.Demo2Reducer;
+import com.zhongyx.bigdata.contest.demo3.Demo3Combiner;
+import com.zhongyx.bigdata.contest.demo3.Demo3Mapper;
+import com.zhongyx.bigdata.contest.demo3.Demo3Reducer;
 
 public class DemoDriver {
 
@@ -102,10 +104,10 @@ public class DemoDriver {
 	job.setJarByClass(DemoDriver.class);
 	
 	// 3 设置map和reduce类
-	job.setMapperClass(Demo2Mapper.class);
-	job.setReducerClass(Demo2Reducer.class);
+	job.setMapperClass(Demo3Mapper.class);
+	job.setReducerClass(Demo3Reducer.class);
 	// 设置combiner
-	job.setCombinerClass(Demo2Reducer.class);
+	job.setCombinerClass(Demo3Combiner.class);
 	
 	// 4 设置map输出
 	job.setMapOutputKeyClass(Text.class);
@@ -113,11 +115,11 @@ public class DemoDriver {
 
 	// 5 设置最终输出kv类型
 	job.setOutputKeyClass(Text.class);
-	job.setOutputValueClass(DoubleWritable.class);
+	job.setOutputValueClass(IntWritable.class);
 
 	// 6 设置输入和输出路径
 	FileInputFormat.setInputPaths(job, new Path("E:\\资料\\高新区比赛\\2018\\input\\惠民资金发放信息.csv"));
-	FileOutputFormat.setOutputPath(job, new Path("E:\\资料\\高新区比赛\\2018\\mrOutput\\demo2"));
+	FileOutputFormat.setOutputPath(job, new Path("E:\\资料\\高新区比赛\\2018\\mrOutput\\demo3"));
 
 
 	// 7 提交

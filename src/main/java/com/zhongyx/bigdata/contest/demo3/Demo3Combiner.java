@@ -1,4 +1,4 @@
-package com.zhongyx.bigdata.contest.demo2;
+package com.zhongyx.bigdata.contest.demo3;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -7,8 +7,8 @@ import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-//按年度统计各个部门资金总发放量（如2018-民政发放量，2017-民政发放量、教育等）（5分）
-public class Demo2Reducer extends Reducer<Text, DoubleWritable,Text, DoubleWritable>{
+//（3）按每个人合计领取资金总量分布统计人数，具体统计项：个人合计领取低于五千人数、五千至三万人数、三至五万人数、五至十万人数、十至二十万人数、二十万以上人数（10分）
+public class Demo3Combiner extends Reducer<Text, DoubleWritable,Text, DoubleWritable>{
 
 	
 	DoubleWritable outputValue= new DoubleWritable();

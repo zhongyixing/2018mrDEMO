@@ -14,15 +14,16 @@ public class Demo1Reducer extends Reducer<Text, DoubleWritable,Text, DoubleWrita
 	DoubleWritable outputValue= new DoubleWritable();
 	
 	@Override
-	protected void reduce(Text key, Iterable<DoubleWritable> value,
+	protected void reduce(Text key, Iterable<DoubleWritable> values,
 			Context context) throws IOException, InterruptedException {
 		
 		
 		double sumMoney=0.0D;
-		Iterator<DoubleWritable> it=value.iterator();
-		while(it.hasNext())
+		
+		for(DoubleWritable money:values)
 		{
-			sumMoney+=it.next().get();
+			
+			sumMoney+=money.get();
 		}
 		
 		outputValue.set(sumMoney);
