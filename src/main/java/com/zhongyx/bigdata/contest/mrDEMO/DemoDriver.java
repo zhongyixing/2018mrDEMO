@@ -19,7 +19,10 @@ public class DemoDriver {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 		// 1 获取配置信息以及封装任务
 		Configuration configuration = new Configuration();
+		//设置切片大小为128MB
+		configuration.setLong("mapreduce.input.fileinputformat.split.minsize",128*1024*1024);
 		Job job = Job.getInstance(configuration);
+
 		
 		// 2 设置jar加载路径
 		job.setJarByClass(DemoDriver.class);
@@ -27,6 +30,8 @@ public class DemoDriver {
 		// 3 设置map和reduce类
 		job.setMapperClass(Demo1Mapper.class);
 		job.setReducerClass(Demo1Reducer.class);
+		// 设置combiner
+		job.setCombinerClass(Demo1Reducer.class);
 		
 		// 4 设置map输出
 		job.setMapOutputKeyClass(Text.class);
