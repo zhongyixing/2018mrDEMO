@@ -62,7 +62,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>com.atguigu.mr.WordcountDriver</mainClass>
+							<mainClass>com.zhongyx.bigdata.contest.mrDEMO.DemoDriver</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
