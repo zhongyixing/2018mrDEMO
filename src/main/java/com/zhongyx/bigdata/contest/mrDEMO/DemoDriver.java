@@ -175,5 +175,49 @@ public class DemoDriver {
 	
 		System.exit(result ? 0 : 1);		
 	}
+	
+	
+//	////（5）分析违规发放情况，发现违法违纪重灾区，如：易出现问题的资金、人群、年度、性别等为领导决策提供参考。(10)
+//	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException, URISyntaxException {
+//		// 1 获取配置信息以及封装任务
+//		Configuration configuration = new Configuration();
+//		//设置切片大小为128MB
+//		configuration.setLong("mapreduce.input.fileinputformat.split.minsize",128*1024*1024);
+//		Job job = Job.getInstance(configuration);
+//	
+//		
+//		// 2 设置jar加载路径
+//		job.setJarByClass(DemoDriver.class);
+//		
+//		// 3 设置map和reduce类
+//		job.setMapperClass(Demo5Mapper.class);
+//		job.setReducerClass(Demo5Reducer.class);
+//		// 设置combiner
+//		job.setCombinerClass(Demo5Reducer.class);
+//		
+//		// 4 设置map输出
+//		job.setMapOutputKeyClass(Text.class);
+//		job.setMapOutputValueClass(DoubleWritable.class);
+//	
+//		// 5 设置最终输出kv类型
+//		job.setOutputKeyClass(Text.class);
+//		job.setOutputValueClass(DoubleWritable.class);
+//	
+//		// 6 设置输入和输出路径
+//		FileInputFormat.setInputPaths(job, new Path("E:\\资料\\高新区比赛\\2018\\input\\惠民资金发放信息.csv"));
+//		FileOutputFormat.setOutputPath(job, new Path("E:\\资料\\高新区比赛\\2018\\mrOutput\\demo5"));
+//	
+//		
+//		// 6 加载缓存数据
+//		job.addCacheFile(new URI("file:///E:/资料/高新区比赛/2018/input/残疾人信息.csv"));
+//		job.addCacheFile(new URI("file:///E:/资料/高新区比赛/2018/input/公职人员及家属信息.csv"));
+//		job.addCacheFile(new URI("file:///E:/资料/高新区比赛/2018/input/死亡人口信息.csv"));
+//
+//	
+//		// 7 提交
+//		boolean result = job.waitForCompletion(true);
+//	
+//		System.exit(result ? 0 : 1);		
+//	}
 
 }
