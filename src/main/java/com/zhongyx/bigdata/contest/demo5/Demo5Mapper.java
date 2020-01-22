@@ -19,9 +19,9 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 //（5）分析违规发放情况，发现违法违纪重灾区，如：易出现问题的资金、人群、年度、性别等为领导决策提供参考。(10)
-public class Demo5Mapper extends Mapper<LongWritable, Text, Text, DoubleWritable>{
+public class Demo5Mapper extends Mapper<LongWritable, Text, Demo5Bean, DoubleWritable>{
 
-	Text outputKey = new Text();
+	Demo5Bean outputKey = new Demo5Bean();
 	DoubleWritable outputValue= new DoubleWritable();
 	
 	//身份证号，发证时间
@@ -37,7 +37,7 @@ public class Demo5Mapper extends Mapper<LongWritable, Text, Text, DoubleWritable
 	Map<String, Long> deadManMap = new HashMap<String, Long>();
 
 	@Override
-	protected void setup(Mapper<LongWritable, Text, Text, DoubleWritable>.Context context)
+	protected void setup(Mapper<LongWritable, Text, Demo5Bean, DoubleWritable>.Context context)
 			throws IOException, InterruptedException {
 		
 		try
@@ -136,7 +136,7 @@ public class Demo5Mapper extends Mapper<LongWritable, Text, Text, DoubleWritable
 
 
 	@Override
-	protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, DoubleWritable>.Context context)
+	protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Demo5Bean, DoubleWritable>.Context context)
 			throws IOException, InterruptedException {
 		
 		try
@@ -154,11 +154,11 @@ public class Demo5Mapper extends Mapper<LongWritable, Text, Text, DoubleWritable
 			
 			String moneyType=columns[2];
 			
-			String gender=columns[3];
+			int gender=Integer.parseInt(columns[3]);
 			
 			String sendDate=columns[4];
 			
-			String year=columns[4].substring(0,4);
+			int year=Integer.parseInt(columns[4].substring(0,4));
 			
 			Double sendMoney=Double.valueOf(columns[5]);
 			
@@ -172,37 +172,36 @@ public class Demo5Mapper extends Mapper<LongWritable, Text, Text, DoubleWritable
 				if((deadTime+(1000*60*60*24*180))>sendTime)
 				{//死亡时间180天后，仍然有资金发放，视为异常
 					exFlag=true;
-					exList.add("死亡人群;");
+					exList.add("死亡人群");
 				}
 			}
 			
 			if(dept.equals("残联") && !breakManMap.containsKey(idenNo))
 			{//如果是残联发放资金，但是在残疾人表找不到身份证号，视为异常
 				exFlag=true;
-				exList.add("残疾人群;");
+				exList.add("残疾人群");
 			}
 			
 			if(masterMap.containsKey(idenNo))
 			{//如果是户主的公职人员，视为异常
 				exFlag=true;
-				exList.add("公职人群;");
+				exList.add("公职人群");
 			}
 			
 			if(dept.equals("民政") && relativesMap.containsKey(idenNo))
 			{//如果是民政发放资金，但是又是公职人员亲属，视为异常
 				exFlag=true;
-				exList.add("公职亲属人群;");
+				exList.add("公职亲属人群");
 			}
 			
 			if(exFlag)
 			{
-				String exDesc=exList.toString();
-				String dimkey=moneyType+"-"+year+"-"+gender+"-"+exDesc;
+				String exDesc=StringUtils.join(exList.toArray(),",");
+				Demo5Bean dimkey=new Demo5Bean(moneyType,year,gender,exDesc);
 				
-				outputKey.set(dimkey);
 				outputValue.set(sendMoney);
 				
-				context.write(outputKey, outputValue);
+				context.write(dimkey, outputValue);
 			}
 		}
 		catch(Exception e)
