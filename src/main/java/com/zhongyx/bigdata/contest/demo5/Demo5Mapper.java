@@ -69,7 +69,18 @@ public class Demo5Mapper extends Mapper<LongWritable, Text, Demo5Bean, DoubleWri
 			
 			// 3 缓存数据到集合
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-			breakManMap.put(fields[0], sdf.parse(fields[1]).getTime());
+			Long sendTime=sdf.parse(fields[1]).getTime();
+
+			Long tempValue=breakManMap.get(fields[0]);
+			
+			if(tempValue==null)
+			{
+				breakManMap.put(fields[0],sendTime);
+			}
+			else if(tempValue!=null && sendTime>tempValue)
+			{
+				breakManMap.put(fields[0],sendTime);
+			}
 		}
 		
 		// 4 关流
@@ -126,7 +137,19 @@ public class Demo5Mapper extends Mapper<LongWritable, Text, Demo5Bean, DoubleWri
 			
 			// 3 缓存数据到集合
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-			deadManMap.put(fields[0], sdf.parse(fields[1]).getTime());
+			Long deadTime=sdf.parse(fields[1]).getTime();
+			
+			
+			Long tempValue=deadManMap.get(fields[0]);
+			
+			if(tempValue==null)
+			{
+				deadManMap.put(fields[0],deadTime);
+			}
+			else if(tempValue!=null && deadTime<tempValue)
+			{
+				deadManMap.put(fields[0],deadTime);
+			}
 		}
 		
 		// 4 关流
