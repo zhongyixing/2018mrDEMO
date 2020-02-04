@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,10 +50,6 @@ public class Demo4Mapper extends Mapper<LongWritable, Text, Text, DoubleWritable
 		{
 			e.printStackTrace();
 		}
-		
-		
-		
-		
 	}
 	
 	private void initBreakManMap(Context context) throws IOException, ParseException
@@ -66,13 +61,23 @@ public class Demo4Mapper extends Mapper<LongWritable, Text, Text, DoubleWritable
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
 		String line;
 		while(StringUtils.isNotEmpty(line = reader.readLine())){
-			//System.out.println("break:"+line);
 			// 2 切割
 			String[] fields = line.split("\t");
 			
 			// 3 缓存数据到集合
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-			breakManMap.put(fields[0], sdf.parse(fields[1]).getTime());
+			Long sendTime=sdf.parse(fields[1]).getTime();
+
+			Long tempValue=breakManMap.get(fields[0]);
+			
+			if(tempValue==null)
+			{
+				breakManMap.put(fields[0],sendTime);
+			}
+			else if(tempValue!=null && sendTime>tempValue)
+			{
+				breakManMap.put(fields[0],sendTime);
+			}
 		}
 		
 		// 4 关流
@@ -123,13 +128,25 @@ public class Demo4Mapper extends Mapper<LongWritable, Text, Text, DoubleWritable
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
 		String line;
 		while(StringUtils.isNotEmpty(line = reader.readLine())){
-//			System.out.println("dead:"+line);
+			
 			// 2 切割
 			String[] fields = line.split("\t");
 			
 			// 3 缓存数据到集合
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-			deadManMap.put(fields[0], sdf.parse(fields[1]).getTime());
+			Long deadTime=sdf.parse(fields[1]).getTime();
+			
+			
+			Long tempValue=deadManMap.get(fields[0]);
+			
+			if(tempValue==null)
+			{
+				deadManMap.put(fields[0],deadTime);
+			}
+			else if(tempValue!=null && deadTime<tempValue)
+			{
+				deadManMap.put(fields[0],deadTime);
+			}
 		}
 		
 		// 4 关流
